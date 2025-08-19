@@ -6,6 +6,7 @@ import dill
 
 from src.exception import CustomException
 from sklearn.metrics import r2_score
+from sklearn.model_selection import GridSearchCV
 
 def save_object(file_path, obj):
     try:
@@ -21,15 +22,31 @@ def save_object(file_path, obj):
         raise CustomeException(e,sys)
     
 
-def evalute_models(X_train,y_train,X_test,y_test,models):
+def evalute_models(X_train,y_train,X_test,y_test,models,params):
     try:
         report ={}
         
-        for name, model in models.items():  
+        for name, model in models.items():
+            para = params.get(name, {})
+            
+            
+            # Train final model
             model.fit(X_train, y_train)
-            y_pred = model.predict(X_test)
-            score = r2_score(y_test, y_pred)
-            report[name] = score
+
+            # Predictions
+            y_train_pred = model.predict(X_train)
+            y_test_pred = model.predict(X_test)
+
+            # R² scores
+            train_model_score = r2_score(y_train, y_train_pred)
+            test_model_score = r2_score(y_test, y_test_pred)
+
+            report[name] = test_model_score
+
+            if para:   # Run GridSearchCV if params exist
+                gs = GridSearchCV(model, para, cv=3)
+                gs.fit(X_train, y_train)
+                model=gs.best_estimator_
         
             
         return report
