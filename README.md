@@ -30,3 +30,11 @@ Key Features:-
 Purpose:-
 
 This project shows how Machine Learning can be applied in education to analyze student performance and make predictions. It also demonstrates skills in Python, ML model building, Flask deployment, and web development basics.
+
+Screenshoots:-
+
+### Input Form
+![Form Screenshot](screenshots/p2.png)
+
+### Prediction Result
+![Result Screenshot](screenshots/result.png)
